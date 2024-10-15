@@ -25,7 +25,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<User> register(@RequestBody RegisterUserDto registerUserDto) {
+    public ResponseEntity<User> register(@RequestBody RegisterUserDto registerUserDto) throws Exception {
 
         User registerUser = authenticationService.signUp(registerUserDto);
         if (registerUser != null) {

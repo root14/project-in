@@ -6,6 +6,7 @@ import com.root14.projectin.entity.User;
 import com.root14.projectin.repositories.UserRepository;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -22,20 +23,25 @@ public class AuthenticationService {
         this.authenticationManager = authenticationManager;
     }
 
-    public User signUp(RegisterUserDto registerUserDto) {
-        User user = new User().toBuilder().userName(registerUserDto.getUsername()).password(passwordEncoder.encode(registerUserDto.getPassword())).email(registerUserDto.getEmail()).build();
+    public User signUp(RegisterUserDto registerUserDto) throws Exception {
+        User user = new User().toBuilder()
+                .userName(registerUserDto.getUsername())
+                .password(passwordEncoder.encode(registerUserDto.getPassword()))
+                .email(registerUserDto.getEmail()).build();
 
-        if (!userRepository.existsByEmail(registerUserDto.getEmail())) {
+
+        if (!userRepository.existsByEmail(registerUserDto.getEmail()) && !userRepository.existsByUserName(registerUserDto.getUsername())) {
             return userRepository.save(user);
         } else {
-            return null;
+            throw new Exception("credential already exist");
         }
     }
 
     public User authenticate(LoginUserDto loginUserDto) {
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginUserDto.getEmail(), loginUserDto.getPassword()));
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginUserDto.getUserName(), loginUserDto.getPassword()));
 
-        return userRepository.findByEmail(loginUserDto.getEmail()).orElseThrow();
+        return (User) authentication.getPrincipal();
+        //return userRepository.findByEmail(loginUserDto.getUserName()).orElseThrow();
     }
 
 }
