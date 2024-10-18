@@ -29,7 +29,7 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable()) // Updated way to disable CSRF
-                .authorizeHttpRequests(auth -> auth.requestMatchers("/auth/**").permitAll() // Updated matcher method
+                .authorizeHttpRequests(auth -> auth.requestMatchers("/auth/**").permitAll().requestMatchers(("/swagger-ui/**")).permitAll().requestMatchers("/docs/**").permitAll() // Updated matcher method
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).authenticationProvider(authenticationProvider).addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
