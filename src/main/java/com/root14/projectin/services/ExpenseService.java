@@ -6,8 +6,6 @@ import com.root14.projectin.entity.User;
 import com.root14.projectin.repositories.ExpenseRepository;
 import com.root14.projectin.repositories.UserRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -23,7 +21,13 @@ public class ExpenseService {
         this.userRepository = userRepository;
     }
 
-    public List<Expense> getAllExpensesByUserId(String userName) {
+    public Boolean deleteExpenseByExpenseId(Long id) {
+        expenseRepository.deleteById(id);
+        return true;
+    }
+
+
+    public List<Expense> getAllExpensesByUserName(String userName) {
         Optional<User> foundedUser = userRepository.findByUserName(userName);
         return foundedUser.map(User::getExpenses).orElse(null);
     }
@@ -34,11 +38,7 @@ public class ExpenseService {
 
             if (foundUser.isPresent()) {
 
-                Expense expense = new Expense().toBuilder().user(foundUser.get())
-                        .price(expenseDto.getPrice())
-                        .description(expenseDto.getDescription())
-                        .category(expenseDto.getCategory())
-                        .build();
+                Expense expense = new Expense().toBuilder().user(foundUser.get()).price(expenseDto.getPrice()).description(expenseDto.getDescription()).category(expenseDto.getCategory()).build();
 
                 expenseRepository.save(expense);
                 return true;//TODO
