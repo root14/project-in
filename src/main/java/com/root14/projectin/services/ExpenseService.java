@@ -6,7 +6,10 @@ import com.root14.projectin.entity.User;
 import com.root14.projectin.repositories.ExpenseRepository;
 import com.root14.projectin.repositories.UserRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -18,6 +21,11 @@ public class ExpenseService {
     public ExpenseService(ExpenseRepository expenseRepository, UserRepository userRepository) {
         this.expenseRepository = expenseRepository;
         this.userRepository = userRepository;
+    }
+
+    public List<Expense> getAllExpensesByUserId(String userName) {
+        Optional<User> foundedUser = userRepository.findByUserName(userName);
+        return foundedUser.map(User::getExpenses).orElse(null);
     }
 
     public Boolean addExpense(ExpenseDto expenseDto) throws Exception {

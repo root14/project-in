@@ -1,14 +1,12 @@
 package com.root14.projectin.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 
-import java.math.BigInteger;
 import java.time.Instant;
-import java.util.Date;
-import java.util.UUID;
 
 @Entity
 @Table(name = "expense")
@@ -36,6 +34,7 @@ public class Expense {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
