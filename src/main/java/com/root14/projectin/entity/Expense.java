@@ -5,8 +5,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.Instant;
+import java.util.Date;
 
 @Entity
 @Table(name = "expense")
@@ -15,6 +16,7 @@ import java.time.Instant;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 public class Expense {
 
     @Column(name = "price")
@@ -27,8 +29,9 @@ public class Expense {
     private String category;
 
     @CreatedDate
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at")
-    private Instant created;
+    private Date created;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
