@@ -27,7 +27,8 @@ public class AuthenticationService {
         User user = new User().toBuilder()
                 .userName(registerUserDto.getUsername())
                 .password(passwordEncoder.encode(registerUserDto.getPassword()))
-                .email(registerUserDto.getEmail()).build();
+                .email(registerUserDto.getEmail())
+                .targetExpenditure("").build();
 
 
         if (!userRepository.existsByEmail(registerUserDto.getEmail()) && !userRepository.existsByUserName(registerUserDto.getUsername())) {

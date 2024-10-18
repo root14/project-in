@@ -1,10 +1,13 @@
 package com.root14.projectin.services;
 
 import com.root14.projectin.dto.ExpenseDto;
+import com.root14.projectin.dto.TargetExpenditureDto;
+import com.root14.projectin.dto.UserNameDto;
 import com.root14.projectin.entity.Expense;
 import com.root14.projectin.entity.User;
 import com.root14.projectin.repositories.ExpenseRepository;
 import com.root14.projectin.repositories.UserRepository;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,6 +22,24 @@ public class ExpenseService {
     public ExpenseService(ExpenseRepository expenseRepository, UserRepository userRepository) {
         this.expenseRepository = expenseRepository;
         this.userRepository = userRepository;
+    }
+
+    public String getTargetExpenditure(UserNameDto userNameDto) {
+        Optional<User> user = userRepository.findByUserName(userNameDto.getUserName());
+
+        return user.map(User::getTargetExpenditure).orElse(null);
+    }
+
+    public Boolean updateTargetExpenditure(TargetExpenditureDto targetExpenditureDto) {
+        Optional<User> user = userRepository.findByUserName(targetExpenditureDto.getUserName());
+
+        if (user.isPresent()) {
+            user.get().setTargetExpenditure(targetExpenditureDto.getTargetExpenditure());
+            userRepository.save(user.get());
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public Boolean deleteExpenseByExpenseId(Long id) {

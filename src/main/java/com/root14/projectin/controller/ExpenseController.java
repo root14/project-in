@@ -1,6 +1,7 @@
 package com.root14.projectin.controller;
 
 import com.root14.projectin.dto.ExpenseIdDto;
+import com.root14.projectin.dto.TargetExpenditureDto;
 import com.root14.projectin.dto.UserNameDto;
 import com.root14.projectin.dto.ExpenseDto;
 import com.root14.projectin.entity.Expense;
@@ -37,5 +38,16 @@ public class ExpenseController {
     @PostMapping("/delete")
     public ResponseEntity<Boolean> deleteExpenseById(@RequestBody ExpenseIdDto expenseIdDto) {
         return ResponseEntity.ok(expenseService.deleteExpenseByExpenseId(expenseIdDto.getExpenseId()));
+    }
+
+    @PostMapping("/updateTargetExpenditure")
+    public ResponseEntity<Boolean> updateTargetExpenditure(@RequestBody TargetExpenditureDto targetExpenditureDto) {
+        expenseService.updateTargetExpenditure(targetExpenditureDto);
+        return ResponseEntity.ok(true);
+    }
+
+    @PostMapping("/getTargetExpenditure")
+    public ResponseEntity<String> getTargetExpenditure(@RequestBody UserNameDto userNameDto) {
+        return ResponseEntity.ok(expenseService.getTargetExpenditure(userNameDto));
     }
 }
