@@ -7,7 +7,6 @@ import com.root14.projectin.dto.ExpenseDto;
 import com.root14.projectin.entity.Expense;
 import com.root14.projectin.services.ExpenseService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,7 +17,6 @@ import java.util.List;
 @RequestMapping("/expense")
 @RestController
 public class ExpenseController {
-
     private final ExpenseService expenseService;
 
     public ExpenseController(ExpenseService expenseService) {
@@ -35,6 +33,11 @@ public class ExpenseController {
         return ResponseEntity.ok(expenseService.getAllExpensesByUserName(userNameDto.getUserName()));
     }
 
+    @PostMapping("/getExpensesByMonth")
+    public ResponseEntity<List<Expense>> getExpensesByMonth(@RequestBody UserNameDto userNameDto) {
+        return ResponseEntity.ok(expenseService.getExpensesByMonth(userNameDto));
+    }
+
 
     @PostMapping("/delete")
     public ResponseEntity<Boolean> deleteExpenseById(@RequestBody ExpenseIdDto expenseIdDto) {
@@ -43,8 +46,7 @@ public class ExpenseController {
 
     @PostMapping("/updateTargetExpenditure")
     public ResponseEntity<Boolean> updateTargetExpenditure(@RequestBody TargetExpenditureDto targetExpenditureDto) {
-        expenseService.updateTargetExpenditure(targetExpenditureDto);
-        return ResponseEntity.ok(true);
+        return ResponseEntity.ok(expenseService.updateTargetExpenditure(targetExpenditureDto));
     }
 
     @PostMapping("/getTargetExpenditure")

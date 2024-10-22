@@ -10,6 +10,7 @@ import com.root14.projectin.repositories.UserRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,6 +23,10 @@ public class ExpenseService {
     public ExpenseService(ExpenseRepository expenseRepository, UserRepository userRepository) {
         this.expenseRepository = expenseRepository;
         this.userRepository = userRepository;
+    }
+
+    public List<Expense> getExpensesByMonth(UserNameDto userNameDto) {
+        return expenseRepository.findExpensesByCreatedAfter(LocalDateTime.now().minusMonths(1));
     }
 
     public String getTargetExpenditure(UserNameDto userNameDto) {
